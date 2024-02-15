@@ -7,21 +7,34 @@ require_once "listClients.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"];
     $apellido = $_POST["apellido"];
-    $email = $_POST["email"];
     $telefono = $_POST["telefono"];
     $fecha_inicio = $_POST["fecha_inicio"];
+    $dias_memmbresia = $_POST["diasMembresia"];
+
+    // Obtener la fecha actual
+    $fecha_registro = date("Y-m-d");
 
     // Prepara la consulta SQL para insertar los datos en la tabla de clientes
-    $sql = "INSERT INTO clientes (nombre, apellido, email, telefono, fecha_inicio_membresia) 
-            VALUES ('$nombre', '$apellido', '$email', '$telefono', '$fecha_inicio')";
+    $sql = "INSERT INTO clientes (nombre, apellido, telefono, fecha_inicio_membresia, diasMembresia, fechaRegistro) 
+            VALUES ('$nombre', '$apellido', '$telefono', '$fecha_inicio','$dias_memmbresia','$fecha_registro')";
 
     // Ejecuta la consulta y muestra un mensaje de éxito o error
     if ($conexion->query($sql) === TRUE) {
-        echo "Cliente registrado correctamente";
+        echo "Cliente registrado correctamente, por favor no recargue la pagina, de click en clientes si quiere crear un cliente nuevo";        
+        header("../dashboard/welcome.php");
     } else {
         echo "Error al registrar el cliente: " . $conexion->error;
+        header("../dashboard/welcome.php");
     }
 }
+
+// Procesar búsqueda si se envió el formulario
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["busqueda"])) {
+    $busqueda = $_GET["busqueda"];
+} else {
+    $busqueda = null;
+}
+
 
 
 ?>
@@ -69,17 +82,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </form>
 
                 <?php include '../components/topbar.php'; ?>   
+                
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                <button id="toggleFormulario" class="btn btn-primary">Mostrar formulario de registro</button></br></br>
 
-
-                    <div class="row">
+                    <div class="row" id="formularioRegistro" style="display:none;">
                         <div class="col-xl-12 col-lg-12">
                             <div class="card shadow mb-4">
                                 <div class="card-body">
                                     <h4 class="mb-4">Registro de clientes</h4>
-                                    <form action="" method="POST">
+                                    <form action="" method="POST" >
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
                                                 <label for="nombre">Nombre:</label>
@@ -90,20 +104,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <input type="text" class="form-control" id="apellido" name="apellido" required>
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label for="email">Email:</label>
-                                                <input type="email" class="form-control" id="email" name="email">
-                                            </div>
-                                            <div class="form-group col-md-3">
                                                 <label for="telefono">Telefono:</label>
                                                 <input type="number" class="form-control" id="telefono" name="telefono">
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
-                                                <label for="fecha_inicio">Fecha de Inicio:</label>
-                                                <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio">
-                                            </div>    
+                                                <label for="fecha_inicio">Inicio de membresia:</label>
+                                                <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
+                                            </div>  
+                                            <div class="form-group col-md-3">
+                                                <label for="diasMembresia">Dias de Membresia:</label>
+                                                <input type="number" class="form-control" id="diasMembresia" name="diasMembresia" required>
+                                            </div>  
                                         </div>
+                                        
                                         <button type="submit" class="btn btn-primary">Registrar</button> 
                                     </form>
                                 </div>
@@ -111,28 +126,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
 
+                   
 
                     <!-- Content Row -->
                     <div class="row">
                         <div class="col-xl-12 col-lg-12">
                             <div class="card shadow mb-4">
+                                 
                                 <div class="card-body">
                                     <div class="table-responsive">
+                                        <!-- formulario de busqueda -->
+                                        <form action="" method="GET" class="row">
+                                            <div class="form-group row">
+                                                <input type="text" class="form-control col-lg-8" id="busqueda" name="busqueda" placeholder="Buscar...">
+                                                <div class=" col-lg-1"></div>
+                                                <button type="submit" class="btn btn-primary col-lg-2">Buscar</button>
+                                            </div>                                    
+                                        </form>
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>ID</th>
                                                     <th>Nombre</th>
-                                                    <th>Apellido</th>
-                                                    <th>Email</th>
+                                                    <th>Apellido</th>                                                    
                                                     <th>Teléfono</th>
                                                     <th>Inicio</th>
+                                                    <th>Membresia</th>
+                                                    <th>Fin</th>
                                                     <th>Estado</th>
                                                     <th>Acción</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php mostrarClientes($conexion); ?>
+                                                <?php mostrarClientes($conexion, $busqueda); ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -179,6 +204,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Page level custom scripts -->
     <script src="../../resources/js/demo/chart-area-demo.js"></script>
     <script src="../../resources/js/demo/chart-pie-demo.js"></script>
+
+    <!-- Funcion para ocultar formulario -->
+    <script>
+    var formularioVisible = false;
+
+    document.getElementById('toggleFormulario').addEventListener('click', function() {
+        if (formularioVisible) {
+            document.getElementById('formularioRegistro').style.display = 'none';
+            document.getElementById('toggleFormulario').textContent = 'Mostrar formulario de registro';
+        } else {
+            document.getElementById('formularioRegistro').style.display = 'block';
+            document.getElementById('toggleFormulario').textContent = 'Ocultar formulario de registro';
+        }
+        formularioVisible = !formularioVisible;
+    });
+    </script>
+
+
 
 </body>
 
