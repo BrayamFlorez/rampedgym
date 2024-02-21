@@ -4,26 +4,27 @@ function mostrarClientes($conexion, $busqueda = null) {
     // Consultar todos los clientes o filtrar por búsqueda
     $sql = "SELECT * FROM clientes";
     if ($busqueda) {
-        $sql .= " WHERE nombre LIKE '%$busqueda%' OR apellido LIKE '%$busqueda%' OR email LIKE '%$busqueda%' OR telefono LIKE '%$busqueda%' OR fecha_inicio_membresia LIKE '%$busqueda%'";
+        $sql .= " WHERE nombre LIKE '%$busqueda%' OR apellido LIKE '%$busqueda%'  OR telefono LIKE '%$busqueda%' OR fecha_inicio_membresia LIKE '%$busqueda%'";
     }
     $resultado = $conexion->query($sql);
-
-    
 
     // Mostrar los clientes en la tabla
     if ($resultado->num_rows > 0) {
         while ($row = $resultado->fetch_assoc()) {
-            // Calcular la diferencia en meses entre la fecha actual y la fecha de inicio de membresía
+            // Calcular la diferencia en días entre la fecha actual y la fecha de inicio de membresía
+            date_default_timezone_set('America/Bogota');
             $fecha_inicio = new DateTime($row["fecha_inicio_membresia"]);
             $fecha_actual = new DateTime();
-            $diferencia_dias = $fecha_inicio->diff($fecha_actual)->days;
+            $diferencia = $fecha_inicio->diff($fecha_actual);
+            $diferencia_dias = $diferencia->days;
+
             $dias_membresia = $row["diasMembresia"];
-            $fecha_vencimiento = $fecha_inicio->modify("+$dias_membresia days");
+            $fecha_vencimiento = $fecha_inicio->modify("+{$dias_membresia} days")->modify("-1 day");
 
             // Determinar el estado de la membresía
             $estado = ($fecha_vencimiento < $fecha_actual) ? 'Vencido' : 'Activo';
 
-            // Aplicar estilos CSS condicionales según la diferencia en meses
+            // Aplicar estilos CSS condicionales según el estado de la membresía
             $color = '';
             $estilo = '';
             if ($estado == "Vencido") {
@@ -39,12 +40,11 @@ function mostrarClientes($conexion, $busqueda = null) {
             echo "<td>" . $row["nombre"] . "</td>";
             echo "<td>" . $row["apellido"] . "</td>";
             echo "<td>" . $row["telefono"] . "</td>";
-            echo "<td>" . $row["fecha_inicio_membresia"] . "</td>";
-            echo "<td>" . $row["diasMembresia"] . "</td>";
+            echo "<td id='fechaInicioMembresia" . $row["id"] . "'>" . $row["fecha_inicio_membresia"] . " <i title='Renovar fecha de inicio' class='fas fa-sync-alt' style='cursor: pointer;' onclick='editarFechaInicioMembresia(" . $row["id"] . ")'></i></td>";
+            echo "<td id='diasMembresia" . $row["id"] . "'>" . $row["diasMembresia"] . " <i title='Renovar dias de membresia' class='fas fa-sync-alt' style='cursor: pointer;' onclick='editarDiasMembresia(" . $row["id"] . ")'></i></td>";
             echo "<td>" . $fecha_vencimiento->format('Y-m-d') . "</td>"; // Mostrar la fecha de vencimiento
             echo "<td style='color: $color; $estilo'>" . $estado . "</td>";
-            echo "<td class='acciones'><a href='deleteClients.php?id=" . $row["id"] . "'><i class='fas fa-trash-alt'></i> Borrar</a> | <a href='renovarMembresia.php?id=" . $row["id"] . "'><i class='fas fa-sync-alt'></i> Renovar</a></td>";
-
+            echo "<td class='acciones'><a href='deleteClients.php?id=" . $row["id"] . "'><i class='fas fa-trash-alt' title='Borrar'></i></a> | <a href='renovarMembresia.php?id=" . $row["id"] . "'><i class='fas fa-sync-alt' title='Renovar con datos actuales'></i></a></td>";
             echo "</tr>";
         }
     } else {
@@ -53,3 +53,47 @@ function mostrarClientes($conexion, $busqueda = null) {
 }
 
 ?>
+
+<script>
+function editarDiasMembresia(idCliente) {
+    var nuevosDias = prompt("Ingrese los nuevos días de membresía:");
+    if (nuevosDias && /^\d+$/.test(nuevosDias)) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "actualizarDiasMembresia.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    // Actualizar el valor en la tabla sin recargar la página
+                    document.getElementById("diasMembresia" + idCliente).innerText = nuevosDias;
+                    alert("Cambio exitoso");
+                    location.reload();
+                } else {
+                    alert("Error al realizar el cambio");
+                }
+            }
+        };
+        xhr.send("id=" + idCliente + "&diasMembresia=" + nuevosDias);
+    } else {
+        alert("Por favor ingrese solo números para los días de membresía.");
+    }
+}
+</script>
+
+<script>
+function editarFechaInicioMembresia(idCliente) {
+    var nuevaFechaInicio = prompt("Ingrese la nueva fecha de inicio de membresía (AAAA-MM-DD):");
+    if (nuevaFechaInicio) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "actualizarFechaInicioMembresia.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Actualizar el valor en la tabla sin recargar la página
+                document.getElementById("fechaInicioMembresia" + idCliente).innerText = nuevaFechaInicio;
+            }
+        };
+        xhr.send("id=" + idCliente + "&fechaInicioMembresia=" + nuevaFechaInicio);
+    }
+}
+</script>
