@@ -53,7 +53,7 @@ require_once "functions.php";
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Bienvenido <?php echo $usuario; ?></h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                                class="fas fa-download fa-sm text-white-50"></i> Generar reporte</a>
                     </div>
 
                     <!-- Content Row -->
@@ -70,7 +70,7 @@ require_once "functions.php";
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_clientes; ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                            <i class="fas fa-user fa-2x text-gray-500"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -84,11 +84,11 @@ require_once "functions.php";
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Maquinas Registradas</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_maquinas; ?></div>
+                                                Asistencias Diarias</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $totalAsistencias; ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-wrench fa-2x text-gray-300"></i>
+                                            <i class="fas fa-list fa-2x text-gray-500"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@ require_once "functions.php";
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-500"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@ require_once "functions.php";
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_mayores_30_dias; ?> Inactivas</div>
                                             </div>
                                         <div class="col-auto">
-                                        <i class="fas fa-check fa-2x text-gray-300"></i>
+                                        <i class="fas fa-check fa-2x text-gray-500"></i>
                                         </div>
                                     </div>
                                 </div>

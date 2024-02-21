@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-02-2024 a las 00:11:59
+-- Tiempo de generación: 21-02-2024 a las 23:17:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -24,6 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `asistencia`
+--
+
+CREATE TABLE `asistencia` (
+  `id` int(11) NOT NULL,
+  `fecha` date NOT NULL,
+  `cliente_id` int(11) NOT NULL,
+  `notificado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `asistencia`
+--
+
+INSERT INTO `asistencia` (`id`, `fecha`, `cliente_id`, `notificado`) VALUES
+(7, '2024-02-21', 50, 0),
+(8, '2024-02-21', 51, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `clientes`
 --
 
@@ -36,6 +57,14 @@ CREATE TABLE `clientes` (
   `diasMembresia` int(11) NOT NULL,
   `fechaRegistro` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `clientes`
+--
+
+INSERT INTO `clientes` (`id`, `nombre`, `apellido`, `telefono`, `fecha_inicio_membresia`, `diasMembresia`, `fechaRegistro`) VALUES
+(50, 'Diego', 'Carrillo', '32302302', '2024-02-21', 30, '2024-02-21'),
+(51, 'Brayam', 'Caicedo', '4323213', '2024-02-20', 23, '2024-02-21');
 
 -- --------------------------------------------------------
 
@@ -95,6 +124,12 @@ INSERT INTO `usuarios` (`id`, `usuario`, `contraseña`, `nombre_completo`, `corr
 --
 
 --
+-- Indices de la tabla `asistencia`
+--
+ALTER TABLE `asistencia`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `clientes`
 --
 ALTER TABLE `clientes`
@@ -123,10 +158,16 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `asistencia`
+--
+ALTER TABLE `asistencia`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `inventario_maquinas`

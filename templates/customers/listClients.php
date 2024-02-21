@@ -1,5 +1,18 @@
 <?php
 
+function mostrarAsistenciaIcono($conexion, $clienteId) {
+    $fecha_actual = date("Y-m-d");
+    $sql = "SELECT * FROM asistencia WHERE cliente_id = $clienteId AND fecha = '$fecha_actual'";
+    $resultado = $conexion->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        return "<i class='fas fa-check-circle' style='color: green;'></i>";
+    } else {
+        return "<i class='far fa-check-circle' style='color: gray; cursor: pointer;' onclick='marcarAsistencia($clienteId); location.reload();'></i>";
+    }
+}
+
+
 function mostrarClientes($conexion, $busqueda = null) {
     // Consultar todos los clientes o filtrar por búsqueda
     $sql = "SELECT * FROM clientes";
@@ -37,13 +50,13 @@ function mostrarClientes($conexion, $busqueda = null) {
 
             // Mostrar el cliente en la tabla con los estilos CSS aplicados
             echo "<tr>";
-            echo "<td>" . $row["nombre"] . "</td>";
-            echo "<td>" . $row["apellido"] . "</td>";
+            echo "<td>" . mostrarAsistenciaIcono($conexion, $row["id"]) . "</td>";
+            echo "<td style='color: $color; $estilo'>" . $row["nombre"] . "</td>";
+            echo "<td style='color: $color; $estilo'>" . $row["apellido"] . "</td>";
             echo "<td>" . $row["telefono"] . "</td>";
-            echo "<td id='fechaInicioMembresia" . $row["id"] . "'>" . $row["fecha_inicio_membresia"] . " <i title='Renovar fecha de inicio' class='fas fa-sync-alt' style='cursor: pointer;' onclick='editarFechaInicioMembresia(" . $row["id"] . ")'></i></td>";
-            echo "<td id='diasMembresia" . $row["id"] . "'>" . $row["diasMembresia"] . " <i title='Renovar dias de membresia' class='fas fa-sync-alt' style='cursor: pointer;' onclick='editarDiasMembresia(" . $row["id"] . ")'></i></td>";
-            echo "<td>" . $fecha_vencimiento->format('Y-m-d') . "</td>"; // Mostrar la fecha de vencimiento
-            echo "<td style='color: $color; $estilo'>" . $estado . "</td>";
+            echo "<td id='fechaInicioMembresia" . $row["id"] . "'>" . $row["fecha_inicio_membresia"] . " <a title='Renovar fecha de inicio' class='fas fa-sync-alt' style='cursor: pointer;' onclick='editarFechaInicioMembresia(" . $row["id"] . ")'></a></td>";
+            echo "<td id='diasMembresia" . $row["id"] . "'>" . $row["diasMembresia"] . " <a title='Renovar dias de membresia' class='fas fa-sync-alt' style='cursor: pointer;' onclick='editarDiasMembresia(" . $row["id"] . ")'></a></td>";
+            echo "<td style='color: $color; $estilo'>" . $fecha_vencimiento->format('Y-m-d') . "</td>"; // Mostrar la fecha de vencimiento
             echo "<td class='acciones'><a href='deleteClients.php?id=" . $row["id"] . "'><i class='fas fa-trash-alt' title='Borrar'></i></a> | <a href='renovarMembresia.php?id=" . $row["id"] . "'><i class='fas fa-sync-alt' title='Renovar con datos actuales'></i></a></td>";
             echo "</tr>";
         }
@@ -95,5 +108,20 @@ function editarFechaInicioMembresia(idCliente) {
         };
         xhr.send("id=" + idCliente + "&fechaInicioMembresia=" + nuevaFechaInicio);
     }
+}
+</script>
+
+<script>
+function marcarAsistencia(clienteId) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "marcarAsistencia.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            // Cambiar el icono a un check marcado después de marcar la asistencia
+            document.getElementById("asistenciaIcon" + clienteId).innerHTML = "<i class='fas fa-check-circle'></i>";
+        }
+    };
+    xhr.send("clienteId=" + clienteId);
 }
 </script>

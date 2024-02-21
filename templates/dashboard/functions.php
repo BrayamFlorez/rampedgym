@@ -65,5 +65,69 @@ if ($resultado_mayores_30_dias->num_rows > 0) {
     $row = $resultado_mayores_30_dias->fetch_assoc();
     $total_mayores_30_dias = $row["total_mayores_30_dias"];
 }
+
+
+
+function contarAsistencias($conexion) {
+    $fecha_actual = date("Y-m-d");
+    $sql = "SELECT COUNT(*) as total FROM asistencia WHERE fecha = '$fecha_actual'";
+    $resultado = $conexion->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
+        return $row["total"];
+    } else {
+        return 0;
+    }
+}
+
+function contarAsistenciasNotificadas($conexion) {
+    $sql = "SELECT COUNT(*) as total FROM asistencia WHERE notificado = '0'";
+    $resultado = $conexion->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
+        return $row["total"];
+    } else {
+        return 0;
+    }
+}
+
+function obtenerClientesNoNotificados($conexion) {
+    $sql = "SELECT DISTINCT cliente_id FROM asistencia WHERE notificado = 0";
+    $resultado = $conexion->query($sql);
+
+    $clientes = array();
+
+    if ($resultado->num_rows > 0) {
+        while ($row = $resultado->fetch_assoc()) {
+            $clienteId = $row["cliente_id"];
+            $cliente = obtenerClientePorId($conexion, $clienteId);
+            if ($cliente) {
+                $clientes[] = $cliente;
+            }
+        }
+    }
+
+    return $clientes;
+}
+
+function obtenerClientePorId($conexion, $clienteId) {
+    $sql = "SELECT nombre, apellido FROM clientes WHERE id = $clienteId";
+    $resultado = $conexion->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        $row = $resultado->fetch_assoc();
+        return $row["nombre"] . " " . $row["apellido"];
+    } else {
+        return null;
+    }
+}
+
+
+
+$totalAsistenciasNotify = contarAsistenciasNotificadas($conexion);
+$totalAsistencias = contarAsistencias($conexion);
+
   
 ?>

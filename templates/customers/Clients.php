@@ -146,14 +146,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["busqueda"])) {
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>
-                                                    <th>Nombre</th>
-                                                    <th>Apellido</th>                                                    
-                                                    <th>Teléfono</th>
-                                                    <th>Inicio</th>
-                                                    <th>Membresia</th>
-                                                    <th>Fin</th>
-                                                    <th>Estado</th>
-                                                    <th>Acción</th>
+                                                    <th scope="col"><i class="far fa-check-circle"></i></th>
+                                                    <th scope="col">Nombre</th>
+                                                    <th scope="col">Apellido</th>                                                    
+                                                    <th scope="col">Celular</th>
+                                                    <th scope="col">Inicio</th>
+                                                    <th scope="col">Membresia</th>
+                                                    <th scope="col">Fin</th>
+                                                    <th scope="col">Acción</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
