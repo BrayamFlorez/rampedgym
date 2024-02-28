@@ -1,33 +1,16 @@
+
 <!-- Topbar Navbar -->
 <ul class="navbar-nav ml-auto">
 
-<!-- Nav Item - Search Dropdown (Visible Only XS) -->
-<li class="nav-item dropdown no-arrow d-sm-none">
-    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-search fa-fw"></i>
-    </a>
-    <!-- Dropdown - Messages -->
-    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-        aria-labelledby="searchDropdown">
-        <form class="form-inline mr-auto w-100 navbar-search">
-            <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small"
-                    placeholder="Search for..." aria-label="Search"
-                    aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
+<!-- Nav Item - User Information -->
+<li class="nav-item dropdown no-arrow">
+        <div class="nav-link" id="clock" style="margin-left: 20px; color: #3a3b45; font-weight: bold;"></div>
 </li>
 
 <!-- Nav Item - Alerts -->
 <li class="nav-item dropdown no-arrow mx-1">
-    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+    
+    <a class="nav-link dropdown-toggle" id="clear" role="button"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-bell fa-fw"></i>
         <!-- Counter - Alerts -->
@@ -39,7 +22,7 @@
         <h6 class="dropdown-header">
             Centro de notificaciones
         </h6>
-        <a class="dropdown-item d-flex align-items-center" href="#">
+        <a class="dropdown-item d-flex align-items-center" href="#">                    
             <div>
                 <?php
                 $clientes = obtenerClientesNoNotificados($conexion);
@@ -53,14 +36,15 @@
                             </div>
                             <div>
                                 <div class="small text-gray-500">' . date("F j, Y") . '</div>
-                                <span class="font-weight-bold">' . $cliente . '</span>
+                                <span class="font-weight-bold">' . $cliente . ' Ha reportado asistencia</span>
                             </div>
                         </a>';
                 }
                 ?>
             </div>
+            
         </a>
-        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+        <a id="clear" class="dropdown-item text-center small text-gray-500" >Limpiar Historial</a>
     </div>
 </li>
 
@@ -118,4 +102,42 @@
             </div>
         </div>
     </div>
-<!-- End of Topbar -->
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const date = now.toLocaleDateString();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('clock').textContent = `${date} ${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateClock, 1000); // Actualiza el reloj cada segundo
+        updateClock(); // Actualiza el reloj de inmediato al cargar la página
+    </script>
+
+
+<script>
+        document.getElementById('clear').addEventListener('click', function(event) {
+            event.preventDefault(); // Evita que el enlace recargue la página
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '../components/marcarNotificacion.php', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.print('Notificaciones marcadas correctamente.');
+                } else {
+                    console.print('Error al marcar las notificaciones: ' + xhr.statusText);
+                }
+                location.reload();
+            };
+            xhr.onerror = function() {
+                alert('Error de conexión.');
+            };
+            xhr.send();
+        });
+    </script>
+
+
+    

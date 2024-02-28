@@ -13,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // No existe un registro de asistencia, insertar uno nuevo
         $sqlInsert = "INSERT INTO asistencia (cliente_id, fecha) VALUES ($clienteId, '$fechaActual')";
         if ($conexion->query($sqlInsert) === TRUE) {
-            echo "Asistencia marcada correctamente.";
         } else {
             echo "Error al marcar la asistencia: " . $conexion->error;
         }

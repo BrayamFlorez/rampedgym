@@ -49,7 +49,7 @@ function mostrarClientes($conexion, $busqueda = null) {
             }
 
             // Mostrar el cliente en la tabla con los estilos CSS aplicados
-            echo "<tr>";
+            echo "<tr style='color: #2e2f35; font-weight: bold;'>";
             echo "<td>" . mostrarAsistenciaIcono($conexion, $row["id"]) . "</td>";
             echo "<td style='color: $color; $estilo'>" . $row["nombre"] . "</td>";
             echo "<td style='color: $color; $estilo'>" . $row["apellido"] . "</td>";
@@ -112,16 +112,16 @@ function editarFechaInicioMembresia(idCliente) {
 </script>
 
 <script>
-function marcarAsistencia(clienteId) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "marcarAsistencia.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            // Cambiar el icono a un check marcado después de marcar la asistencia
-            document.getElementById("asistenciaIcon" + clienteId).innerHTML = "<i class='fas fa-check-circle'></i>";
-        }
-    };
-    xhr.send("clienteId=" + clienteId);
-}
+    function marcarAsistencia(clienteId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "marcarAsistencia.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Cambiar el icono a un check marcado después de marcar la asistencia
+                document.getElementById("asistenciaIcon" + clienteId).innerHTML = "<i class='fas fa-check-circle'></i>";
+            }
+        };
+        xhr.send("clienteId=" + clienteId);
+    }
 </script>

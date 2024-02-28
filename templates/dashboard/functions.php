@@ -3,6 +3,7 @@
 
 require_once "../../resources/config.php";
 
+
 // Verificar si el usuario ha iniciado sesión
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: ../login/login.php");
@@ -108,7 +109,6 @@ function obtenerClientesNoNotificados($conexion) {
             }
         }
     }
-
     return $clientes;
 }
 
@@ -116,13 +116,16 @@ function obtenerClientePorId($conexion, $clienteId) {
     $sql = "SELECT nombre, apellido FROM clientes WHERE id = $clienteId";
     $resultado = $conexion->query($sql);
 
+    
+
     if ($resultado->num_rows > 0) {
-        $row = $resultado->fetch_assoc();
+        $row = $resultado->fetch_assoc();        
         return $row["nombre"] . " " . $row["apellido"];
     } else {
         return null;
     }
 }
+
 
 
 

@@ -59,6 +59,16 @@
 
 <!-- Nav Item - Charts -->
 <li class="nav-item">
+    <a class="nav-link" href="../check/check.php">
+        <i class="fas fa-fw fa-list"></i>
+        <span>Asistencia</span></a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider d-none d-md-block">
+
+<!-- Nav Item - Charts -->
+<li class="nav-item">
     <a class="nav-link" href="../machines/machines.php">
         <i class="fas fa-fw fa-wrench"></i>
         <span>Maquinas</span></a>

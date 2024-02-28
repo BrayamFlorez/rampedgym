@@ -17,5 +17,6 @@
 
      <!-- Favicon -->
      <link rel="icon" type="image/png" href="../../resources/img/favicon.png">
+<!-- End of Topbar -->
 
 </head>

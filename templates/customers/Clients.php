@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"];
     $apellido = $_POST["apellido"];
     $telefono = $_POST["telefono"];
+    $id = $_POST["id"];
     $fecha_inicio = $_POST["fecha_inicio"];
     $dias_memmbresia = $_POST["diasMembresia"];
 
@@ -15,15 +16,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha_registro = date("Y-m-d");
 
     // Prepara la consulta SQL para insertar los datos en la tabla de clientes
-    $sql = "INSERT INTO clientes (nombre, apellido, telefono, fecha_inicio_membresia, diasMembresia, fechaRegistro) 
-            VALUES ('$nombre', '$apellido', '$telefono', '$fecha_inicio','$dias_memmbresia','$fecha_registro')";
+    $sql = "INSERT INTO clientes (id, nombre, apellido, telefono, fecha_inicio_membresia, diasMembresia, fechaRegistro) 
+            VALUES ('$id','$nombre', '$apellido', '$telefono', '$fecha_inicio','$dias_memmbresia','$fecha_registro')";
 
     // Ejecuta la consulta y muestra un mensaje de éxito o error
     if ($conexion->query($sql) === TRUE) {
-        echo "Cliente registrado correctamente, por favor no recargue la pagina, de click en clientes si quiere crear un cliente nuevo";        
+        error_log( "Cliente registrado correctamente, por favor no recargue la pagina, de click en clientes si quiere crear un cliente nuevo");       
         header("../dashboard/welcome.php");
     } else {
-        echo "Error al registrar el cliente: " . $conexion->error;
+        error_log( "Error al registrar el cliente: " . $conexion->error);
         header("../dashboard/welcome.php");
     }
 }
@@ -67,19 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["busqueda"])) {
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    
 
                 <?php include '../components/topbar.php'; ?>   
                 
@@ -109,6 +98,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["busqueda"])) {
                                             </div>
                                         </div>
                                         <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                                <label for="id">Identificacion:</label>
+                                                <input type="number" class="form-control" id="id" name="id">
+                                            </div>
                                             <div class="form-group col-md-3">
                                                 <label for="fecha_inicio">Inicio de membresia:</label>
                                                 <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
@@ -220,6 +213,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["busqueda"])) {
         formularioVisible = !formularioVisible;
     });
     </script>
+
+    
 
 
 
