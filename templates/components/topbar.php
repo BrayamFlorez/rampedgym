@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="small text-gray-500">' . date("F j, Y") . '</div>
+                                
                                 <span class="font-weight-bold">' . $cliente . ' Ha reportado asistencia</span>
                             </div>
                         </a>';

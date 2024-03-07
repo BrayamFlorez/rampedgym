@@ -154,9 +154,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <div class="form-group">
                 <button type="submit" class="btn-login">Iniciar sesión</button>
-            </div>
+            </div>            
             <div class="error-message"><?php echo $login_err; ?></div>
         </form>
+        <div class="form-group">
+                <a href="../check/check.php" class="btn-login">Reportar Asistencia</a>
+        </div>
     </div>
     <?php
     // Mostrar alertas de error si es necesario

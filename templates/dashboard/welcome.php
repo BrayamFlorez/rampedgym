@@ -2,6 +2,8 @@
 // Iniciar sesión
 session_start();
 require_once "functions.php";
+require_once "../../resources/sesion.php";
+require_once "../generalFunctions/fechaHora.php";
 ?>
 
 <!DOCTYPE html>

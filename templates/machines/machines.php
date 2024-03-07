@@ -3,6 +3,7 @@
 session_start();
 require_once "../dashboard/functions.php";
 require_once "listMachine.php";
+require_once "../../resources/sesion.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recupera los datos del formulario

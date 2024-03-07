@@ -1,8 +1,8 @@
 <?php
+require_once "../generalFunctions/fechaHora.php";
 
 function mostrarAsistenciaIcono($conexion, $clienteId) {
-    $fecha_actual = date("Y-m-d");
-    $sql = "SELECT * FROM asistencia WHERE cliente_id = $clienteId AND fecha = '$fecha_actual'";
+    $sql = "SELECT cliente_id FROM asistencia WHERE cliente_id = $clienteId AND DATE(fecha) = CURDATE()";
     $resultado = $conexion->query($sql);
 
     if ($resultado->num_rows > 0) {

@@ -3,6 +3,7 @@
 session_start();
 require_once "../dashboard/functions.php";
 require_once "listClients.php";
+require_once "../../resources/sesion.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"];
