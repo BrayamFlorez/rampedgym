@@ -39,7 +39,7 @@ require_once "../generalFunctions/datosCliente.php";
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- INGRESO DE DOCUMENTO PARA MARCAR ASISTENCIA -->
                         <div class="col-xl-12 col-md-12 mb-12">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
@@ -47,9 +47,9 @@ require_once "../generalFunctions/datosCliente.php";
                                         <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Registra tu asistencia </div>
-                                                <form action="../customers/marcarAsistencia.php" method="POST">
-                                                    <input type="number" class="form-control" id="identificacion" name="clienteId" placeholder="123456789" onkeypress="checkEnter(event)">
-                                                </form>
+                                                
+                                                    <input type="number" class="form-control" id="clienteIdInput" name="clienteId" placeholder="123456789" onkeypress="checkKey(event)">
+                                                
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-check fa-2x text-gray-500"></i>
@@ -60,50 +60,75 @@ require_once "../generalFunctions/datosCliente.php";
                         </div>
                     </div><br>
                     <!-- Content Row -->
-                    <div class="row">                        
+                    <div class="row"> 
+
+                         <!-- NOMBRE -->                  
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="row no-gutters align-items-center " >
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Bienvenido</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $nombre; ?></div>
+                                            <div id="nombreApellidoCliente" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-500"></i>
+                                        <div class="col-auto d-flex align-items-center"> <!-- Agregamos las clases d-flex y align-items-center -->
+                                            <i class="fas fa-user fa-2x text-gray-500"></i>                                           
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- INICIO DE MEMBRESIA -->  
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="row no-gutters align-items-center" >
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Iniciaste membresia el:</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $inicio; ?></div>
+                                            <div id="inicio" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-500"></i>
+                                        <div class="col-auto d-flex align-items-center">
+                                            <i class="fas fa-calendar-day fa-2x text-gray-500"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- DIAS DE MEMBRESIA -->  
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Has asistido:</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Dias de Membresia:</div>
+                                            <div id="dias" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-500"></i>
+                                        <div class="col-auto d-flex align-items-center">
+                                        <i class="fas fa-address-card fa-2x text-gray-500"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- REGISTRO -->  
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Fecha de registro:</div>
+                                            <div id="registro" class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                                        </div>
+                                        <div class="col-auto d-flex align-items-center">
+                                        <i class="fas fa-calendar-check fa-2x text-gray-500"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -126,7 +151,6 @@ require_once "../generalFunctions/datosCliente.php";
         <i class="fas fa-angle-up"></i>
     </a>
 
-    
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../resources/vendor/jquery/jquery.min.js"></script>
@@ -136,11 +160,41 @@ require_once "../generalFunctions/datosCliente.php";
     <script src="../../resources/js/sb-admin-2.min.js"></script>
 
     <script>
-    function checkEnter(event) {
-        if (event.keyCode == 13) {
-            document.querySelector('form').submit();
-        }
-    }
+        $(document).ready(function(){
+            $("#clienteIdInput").keypress(function(event){
+                if(event.which == 13){
+                    var clienteId = $(this).val();
+                    
+                    $.ajax({
+                        url: '../customers/marcarAsistencia.php',
+                        type: 'POST',
+                        data: {clienteId: clienteId},
+                        dataType: 'json',
+                        success: function(response){
+                            if(response.error){
+                                $("#resultado").text(response.error);
+                            } else {
+                                // Captura los datos retornados en variables
+                                var nombreCliente = response.nombre;
+                                var apellidoCliente = response.apellido;
+                                var fechaInicioMembresia = response.fecha_inicio_membresia;
+                                var diasMembresia = response.diasMembresia;
+                                var fechaRegistro = response.fechaRegistro;
+                                
+                                // Actualiza el contenido del elemento con el ID nombreApellidoCliente
+                                $("#nombreApellidoCliente").text(nombreCliente + ' ' + apellidoCliente);
+                                $("#inicio").text(fechaInicioMembresia);
+                                $("#dias").text(diasMembresia + " Dias");
+                                $("#registro").text(fechaRegistro);
+                                }
+                        },
+                        error: function(xhr, status, error){
+                            $("#resultado").text("Error al marcar la asistencia: " + error);
+                        }
+                    });
+                }
+            });
+        });
     </script>
 
     <script>
@@ -152,6 +206,7 @@ require_once "../generalFunctions/datosCliente.php";
         input.focus();
         
     </script>
+
 
 </body>
 

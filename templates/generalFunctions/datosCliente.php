@@ -4,6 +4,7 @@ require_once "../../resources/config.php";
 function obtenerDatosCliente($idCliente){
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['idCliente'])) {
     $idCliente = $_GET['idCliente'];
+    echo $idCliente;
 
     // Consultar los datos del cliente con el ID especificado
     $sql = "SELECT * FROM clientes WHERE id = $idCliente";
@@ -30,4 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['idCliente'])) {
     echo "Por favor, proporcione un ID de cliente válido.";
 }
 }
+
+
 ?>

@@ -125,32 +125,73 @@ require_once "../generalFunctions/fechaHora.php";
                         </div>
                     </div>
                     <div class="row">
-                    <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Asistencias</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
+                        <!-- Pie Chart -->
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Asistencias</h6>
                                     </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> Asistencias
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> No Asistencias
-                                        </span>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-pie pt-4 pb-2">
+                                            <canvas id="Asistencias"></canvas>
+                                        </div>
+                                        <div class="mt-4 text-center small">
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-danger"></i> No Asistidos
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-success"></i> Asistidos
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pie Chart -->
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Membresias</h6>
+                                    </div>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-pie pt-4 pb-2">
+                                            <canvas id="Membresias"></canvas>
+                                        </div>
+                                        <div class="mt-4 text-center small">
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-warning"></i> Vencidas
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-success"></i> Activas
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- grafico historico -->
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Asistencias Historicas</h6>
+                                    </div>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-area pt-4 pb-2">
+                                            <canvas id="myAreaChart"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div> 
+                        
+                    </div> 
                 </div>
                 
                 </div>
@@ -187,6 +228,24 @@ require_once "../generalFunctions/fechaHora.php";
     <!-- Page level custom scripts -->
     <script src="../../resources/js/demo/chart-area-demo.js"></script>
     <script src="../../resources/js/demo/chart-pie-demo.js"></script>
+
+    <script>
+    // Llamamos a la función crearGraficoPie con los datos adecuados
+    var datos = ['<?php echo $totalAsistencias; ?>', '<?php echo $total_clientes-$totalAsistencias; ?>']; // Ejemplo de datos
+    var etiquetas = ["Asistidos", "No asistidos"]; // Ejemplo de etiquetas
+    var backgroundColors = ['#1cc88a','#e74a3b']; // Ejemplo de colores de fondo
+    var hoverBackgroundColors = ['#035236', '#6A0F06']; // Ejemplo de colores de fondo al pasar el mouse
+    
+    crearGraficoPie(datos, etiquetas, backgroundColors, hoverBackgroundColors, "Asistencias");
+
+    var etiquetas = ["Membresias Vencidas", "Membresias Activas"]; // Ejemplo de etiquetas
+    var backgroundColors = ['#1cc88a','#f6c23e']; // Ejemplo de colores de fondo
+    var hoverBackgroundColors = ['#035236', '#D1990A']; // Ejemplo de colores de fondo al pasar el mouse
+    var datos = ['<?php echo $total_menores_30_dias; ?>', '<?php echo $total_mayores_30_dias; ?>']; // Ejemplo de datos
+    crearGraficoPie(datos, etiquetas, backgroundColors, hoverBackgroundColors, "Membresias");
+
+
+    </script>
     
 
 </body>

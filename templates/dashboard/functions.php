@@ -2,6 +2,7 @@
 // funciones.php
 
 require_once "../../resources/config.php";
+require_once "../generalFunctions/fechaHora.php";
 
 $sql = "SELECT COUNT(*) as total_maquinas FROM inventario_maquinas";
 $resultado = $conexion->query($sql);
@@ -19,11 +20,8 @@ if ($resultado->num_rows > 0) {
     $total_rutinas = $row["total_rutinas"];
 }
 
-// Obtener la fecha actual
-$fecha_actual = date("Y-m-d");
-
 // Calcular la fecha 30 días antes
-$fecha_30_dias_atras = date("Y-m-d", strtotime("-30 days", strtotime($fecha_actual)));
+$fecha_30_dias_atras = date("Y-m-d", strtotime("-30 days", strtotime($fechaActual)));
 
 // Consulta SQL para contar los clientes con fecha de inicio de membresía menor a 30 días
 $sql_menores_30_dias = "SELECT COUNT(*) AS total_menores_30_dias FROM clientes WHERE fecha_inicio_membresia > '$fecha_30_dias_atras'";
@@ -52,10 +50,11 @@ if ($resultado_mayores_30_dias->num_rows > 0) {
 
 
 function contarAsistencias($conexion) {
-    $fecha_actual = date("Y-m-d");
-    $sql = "SELECT COUNT(*) as total FROM asistencia WHERE fecha = '$fecha_actual'";
+    date_default_timezone_set('UTC');
+    date_default_timezone_set("America/Bogota");
+    $fechaActual = date('Y-m-d 00:00:00');
+    $sql = "SELECT COUNT(*) as total FROM asistencia WHERE fecha > '$fechaActual'";
     $resultado = $conexion->query($sql);
-
     if ($resultado->num_rows > 0) {
         $row = $resultado->fetch_assoc();
         return $row["total"];
