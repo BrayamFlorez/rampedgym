@@ -48,7 +48,6 @@ if ($resultado_mayores_30_dias->num_rows > 0) {
 }
 
 
-
 function contarAsistencias($conexion) {
     date_default_timezone_set('UTC');
     date_default_timezone_set("America/Bogota");
@@ -107,8 +106,34 @@ function obtenerClientePorId($conexion, $clienteId) {
     }
 }
 
+function contarAsistenciasPorDia($conexion, $diasHaciaAtras) {
+    date_default_timezone_set("America/Bogota");
+    $fechas = array();
+    $asistenciasPorDia = array();
+
+    for ($i = 0; $i < $diasHaciaAtras; $i++) {
+        $fecha = date('Y-m-d', strtotime("-$i days"));
+        $fechas[] = $fecha;
+        $asistenciasPorDia[$fecha] = 0; // Inicializar a cero las asistencias para este día
+    }
+
+    $sql = "SELECT COUNT(*) as total, DATE(fecha) as fecha FROM asistencia WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL $diasHaciaAtras DAY) GROUP BY DATE(fecha)";
+
+    $resultado = $conexion->query($sql);
+
+    if ($resultado->num_rows > 0) {
+        while ($row = $resultado->fetch_assoc()) {
+            $fecha = date('Y-m-d', strtotime($row["fecha"]));
+            $asistenciasPorDia[$fecha] = $row["total"];
+        }
+    }
+
+    return $asistenciasPorDia;
+}
 
 
+// Ejemplo de uso: obtener el número de asistencias de los últimos 7 días
+$asistenciasPorDia = contarAsistenciasPorDia($conexion, 7);
 
 $totalAsistenciasNotify = contarAsistenciasNotificadas($conexion);
 $totalAsistencias = contarAsistencias($conexion);

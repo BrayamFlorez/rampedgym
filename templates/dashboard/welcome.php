@@ -4,6 +4,9 @@ session_start();
 require_once "functions.php";
 require_once "../../resources/sesion.php";
 require_once "../generalFunctions/fechaHora.php";
+
+$asistenciasPorDia = contarAsistenciasPorDia($conexion, 7);
+$asistenciasPorDiaJSON = json_encode($asistenciasPorDia);
 ?>
 
 <!DOCTYPE html>
@@ -22,15 +25,7 @@ require_once "../generalFunctions/fechaHora.php";
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+            <div id="content">                
 
                 <?php include '../components/topbar.php'; ?>   
 
@@ -53,8 +48,8 @@ require_once "../generalFunctions/fechaHora.php";
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Clientes Registrados</div>
+                                            <a href="../customers/clients.php" class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Clientes Registrados</a>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_clientes; ?></div>
                                         </div>
                                         <div class="col-auto">
@@ -129,10 +124,10 @@ require_once "../generalFunctions/fechaHora.php";
                             <div class="col-xl-4 col-lg-5">
                                 <div class="card shadow mb-4">
                                     <!-- Card Header - Dropdown -->
-                                    <div
+                                    <a href="../customers/clients.php"
                                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Asistencias</h6>
-                                    </div>
+                                        <h6  class="m-0 font-weight-bold text-primary">Asistencias</h6>
+                                    </a>
                                     <!-- Card Body -->
                                     <div class="card-body">
                                         <div class="chart-pie pt-4 pb-2">
@@ -153,10 +148,10 @@ require_once "../generalFunctions/fechaHora.php";
                             <div class="col-xl-4 col-lg-5">
                                 <div class="card shadow mb-4">
                                     <!-- Card Header - Dropdown -->
-                                    <div
+                                    <a href="../customers/clients.php"
                                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                         <h6 class="m-0 font-weight-bold text-primary">Membresias</h6>
-                                    </div>
+                                    </a>
                                     <!-- Card Body -->
                                     <div class="card-body">
                                         <div class="chart-pie pt-4 pb-2">
@@ -244,7 +239,13 @@ require_once "../generalFunctions/fechaHora.php";
     var datos = ['<?php echo $total_menores_30_dias; ?>', '<?php echo $total_mayores_30_dias; ?>']; // Ejemplo de datos
     crearGraficoPie(datos, etiquetas, backgroundColors, hoverBackgroundColors, "Membresias");
 
+    // Uso de la función con datos específicos
+    var asistenciasPorDia = <?php echo $asistenciasPorDiaJSON; ?>;
 
+    // Obtener las claves y los valores del objeto JSON
+    var labels = Object.keys(asistenciasPorDia);
+    var data = Object.values(asistenciasPorDia);
+    generarGraficoArea(labels, data, "Asistencias", "myAreaChart");
     </script>
     
 

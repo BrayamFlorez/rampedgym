@@ -1,9 +1,9 @@
 <?php
-
-require_once "../dashboard/functions.php";
+require_once "functions.php";
 require_once "../generalFunctions/datosCliente.php";
 
-
+$asistenciasPorDia = contarAsistenciasPorDia($conexion, 7);
+$asistenciasPorDiaJSON = json_encode($asistenciasPorDia);
 ?>
 
 
@@ -15,8 +15,6 @@ require_once "../generalFunctions/datosCliente.php";
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-    <?php include '../components/slidebar.php'; ?>
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -26,12 +24,9 @@ require_once "../generalFunctions/datosCliente.php";
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                <?php include '../components/topbar.php'; ?>   
+            
+                </ul>
+                </nav>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -135,6 +130,76 @@ require_once "../generalFunctions/datosCliente.php";
                             </div>
                         </div>
                     </div>
+                    <div>
+                    <div class="row">
+                        <!-- Pie Chart -->
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <a href="../customers/clients.php"
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6  class="m-0 font-weight-bold text-primary">Asistencias</h6>
+                                    </a>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-pie pt-4 pb-2">
+                                            <canvas id="Asistencias"></canvas>
+                                        </div>
+                                        <div class="mt-4 text-center small">
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-danger"></i> No Asistidos
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-success"></i> Asistidos
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pie Chart -->
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <a href="../customers/clients.php"
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Membresias</h6>
+                                    </a>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-pie pt-4 pb-2">
+                                            <canvas id="Membresias"></canvas>
+                                        </div>
+                                        <div class="mt-4 text-center small">
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-warning"></i> Vencidas
+                                            </span>
+                                            <span class="mr-2">
+                                                <i class="fas fa-circle text-success"></i> Activas
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- grafico historico -->
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card shadow mb-4">
+                                    <!-- Card Header - Dropdown -->
+                                    <div
+                                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">Asistencias Historicas</h6>
+                                    </div>
+                                    <!-- Card Body -->
+                                    <div class="card-body">
+                                        <div class="chart-area pt-4 pb-2">
+                                            <canvas id="myAreaChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div> 
+                    </div>
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -149,8 +214,7 @@ require_once "../generalFunctions/datosCliente.php";
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
-    </a>
-
+    </a>  
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../resources/vendor/jquery/jquery.min.js"></script>
@@ -180,12 +244,25 @@ require_once "../generalFunctions/datosCliente.php";
                                 var fechaInicioMembresia = response.fecha_inicio_membresia;
                                 var diasMembresia = response.diasMembresia;
                                 var fechaRegistro = response.fechaRegistro;
+
                                 
                                 // Actualiza el contenido del elemento con el ID nombreApellidoCliente
                                 $("#nombreApellidoCliente").text(nombreCliente + ' ' + apellidoCliente);
                                 $("#inicio").text(fechaInicioMembresia);
-                                $("#dias").text(diasMembresia + " Dias");
+                                
                                 $("#registro").text(fechaRegistro);
+
+                                // Obtener la fecha actual
+                                var fechaActual = new Date();
+
+                                // Convertir la fecha de inicio de membresía a objeto Date
+                                var fechaInicioMembresia = new Date(fechaInicioMembresia);
+
+                                // Calcular la diferencia en días entre las dos fechas
+                                var diferenciaEnDias = Math.floor((fechaActual - fechaInicioMembresia) / (1000 * 60 * 60 * 24));
+
+                                $("#dias").text(diferenciaEnDias+ " de " +diasMembresia );
+                                
                                 }
                         },
                         error: function(xhr, status, error){
@@ -197,6 +274,13 @@ require_once "../generalFunctions/datosCliente.php";
         });
     </script>
 
+    <!-- Page level plugins -->
+    <script src="../../resources/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="../../resources/js/demo/chart-area-demo.js"></script>
+    <script src="../../resources/js/demo/chart-pie-demo.js"></script>
+
     <script>
         // Seleccionar el input
         var input = document.getElementById("identificacion");
@@ -205,6 +289,24 @@ require_once "../generalFunctions/datosCliente.php";
         // Enfocar el input para que el usuario pueda escribir directamente
         input.focus();
         
+    </script>
+
+    <script>
+    
+
+    var etiquetas = ["Membresias Vencidas", "Membresias Activas"]; // Ejemplo de etiquetas
+    var backgroundColors = ['#1cc88a','#f6c23e']; // Ejemplo de colores de fondo
+    var hoverBackgroundColors = ['#035236', '#D1990A']; // Ejemplo de colores de fondo al pasar el mouse
+    var datos = ['10', '20']; // Ejemplo de datos
+    crearGraficoPie(datos, etiquetas, backgroundColors, hoverBackgroundColors, "Membresias");
+
+    // Uso de la función con datos específicos
+    var asistenciasPorDia = <?php echo $asistenciasPorDiaJSON; ?>;
+
+    // Obtener las claves y los valores del objeto JSON
+    var labels = Object.keys(asistenciasPorDia);
+    var data = Object.values(asistenciasPorDia);
+    generarGraficoArea(labels, data, "Asistencias", "myAreaChart");
     </script>
 
 
